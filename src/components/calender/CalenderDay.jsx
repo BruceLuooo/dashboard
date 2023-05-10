@@ -15,6 +15,8 @@ function CalenderDay({ day, rowIdx }) {
 		activeBookmarks,
 		setMouseRightClick,
 		setRightClickPoints,
+		setContextMenuAnimation,
+		setMouseLeftClick,
 	} = useContext(CalenderContext);
 
 	const [dayEvents, setDayEvents] = useState([]);
@@ -89,9 +91,10 @@ function CalenderDay({ day, rowIdx }) {
 			</div>
 			<div
 				className='calender-events'
-				onClick={() => {
+				onClick={e => {
 					setDaySelected(day);
 					setShowModal(true);
+					setMouseLeftClick({ x: e.clientX, y: e.clientY });
 				}}
 				onDragOver={handleDragOver}
 				onDrop={e => handleDrop(e, day)}
@@ -99,13 +102,21 @@ function CalenderDay({ day, rowIdx }) {
 				{dayEvents.map((evt, idx) => (
 					<div
 						key={idx}
-						onClick={() => setSelectedEvent(evt)}
+						onClick={e => {
+							setSelectedEvent(evt);
+							setMouseLeftClick({ x: e.clientX, y: e.clientY });
+							setContextMenuAnimation(true);
+						}}
 						className={`${evt.bookmark} calender-day-event`}
 						draggable={true}
-						onDragStart={() => handleDragStart(evt)}
+						onDragStart={() => {
+							handleDragStart(evt);
+							setMouseRightClick(false);
+						}}
 						onContextMenu={e => {
 							e.preventDefault();
 							e.stopPropagation();
+							setContextMenuAnimation(true);
 							setSelectedEvent(evt);
 							setRightClickPoints({ x: e.clientX, y: e.clientY });
 							setMouseRightClick(true);

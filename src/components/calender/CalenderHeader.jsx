@@ -11,11 +11,15 @@ function CalenderHeader({ setting, setViewSetting, currentWeek }) {
 		setWeekIndex,
 		activeBookmarks,
 		updateActiveBookmark,
+		setMounted,
+		setDirection,
 	} = useContext(CalenderContext);
 
 	const next = () => {
 		if (setting === 'month') {
 			setMonthIndex(monthIndex + 1);
+			setDirection('left');
+			setMounted(true);
 		} else {
 			setWeekIndex(weekIndex + 1);
 		}
@@ -23,12 +27,20 @@ function CalenderHeader({ setting, setViewSetting, currentWeek }) {
 	const prev = () => {
 		if (setting === 'month') {
 			setMonthIndex(monthIndex - 1);
+			setDirection('right');
+			setMounted(true);
 		} else {
 			setWeekIndex(weekIndex - 1);
 		}
 	};
 	const today = () => {
 		if (setting === 'month') {
+			if (monthIndex > dayjs().month()) {
+				setDirection('right');
+			} else {
+				setDirection('left');
+			}
+			setMounted(true);
 			setMonthIndex(dayjs().month());
 		} else {
 			setWeekIndex(0);
@@ -37,6 +49,7 @@ function CalenderHeader({ setting, setViewSetting, currentWeek }) {
 
 	const [isSameMonth, setIsSameMonth] = useState(true);
 	const [isSameYear, setIsSameYear] = useState(true);
+	const [backgroundColor, setBackgroundColor] = useState('left');
 
 	useEffect(() => {
 		const firstDayOfWeek = {
@@ -56,6 +69,15 @@ function CalenderHeader({ setting, setViewSetting, currentWeek }) {
 			setIsSameYear(true);
 		} else setIsSameYear(false);
 	}, [currentWeek]);
+
+	const displayMonth = () => {
+		setViewSetting('month');
+		setBackgroundColor('left');
+	};
+	const displayWeek = () => {
+		setViewSetting('week');
+		setBackgroundColor('right');
+	};
 
 	return (
 		<div className='calender-header-container'>
@@ -114,8 +136,9 @@ function CalenderHeader({ setting, setViewSetting, currentWeek }) {
 				))}
 			</div>
 			<div className='calender-header-toggle'>
-				<button onClick={() => setViewSetting('month')}>Month</button>
-				<button onClick={() => setViewSetting('week')}>Week</button>
+				<div className={`background ${backgroundColor}`}></div>
+				<button onClick={displayMonth}>Month</button>
+				<button onClick={displayWeek}>Week</button>
 			</div>
 		</div>
 	);

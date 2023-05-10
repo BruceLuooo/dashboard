@@ -1,4 +1,10 @@
-import { useContext, useState } from 'react';
+import {
+	useContext,
+	useState,
+	useLayoutEffect,
+	useRef,
+	useEffect,
+} from 'react';
 import CalenderContext from '../../context/CalenderContext';
 import close from '../../assets/close.png';
 import clock from '../../assets/clock.png';
@@ -11,8 +17,15 @@ import removeEvent from '../../assets/delete-event.png';
 function EventModal() {
 	const bookmarkColors = ['indigo', 'gray', 'green', 'blue', 'red', 'purple'];
 
-	const { daySelected, selectedEvent, setShowModal, dispatch } =
-		useContext(CalenderContext);
+	const {
+		daySelected,
+		selectedEvent,
+		setShowModal,
+		dispatch,
+		mouseLeftClick,
+		contextMenuAnimation,
+		setContextMenuAnimation,
+	} = useContext(CalenderContext);
 
 	const [title, setTitle] = useState(selectedEvent ? selectedEvent.title : '');
 	const [description, setDescription] = useState(
@@ -24,6 +37,47 @@ function EventModal() {
 	const [addPeople, setAddPeople] = useState(
 		selectedEvent ? selectedEvent.people : '',
 	);
+
+	const contextRef = useRef(null);
+
+	const [contextData, setContextData] = useState({
+		posX: mouseLeftClick.x,
+		posY: mouseLeftClick.y,
+		visible: true,
+		closeToWindowSide: 'left',
+	});
+
+	useEffect(() => {
+		setContextData({
+			posX: mouseLeftClick.x,
+			posY: mouseLeftClick.y,
+			visible: true,
+		});
+	}, [mouseLeftClick]);
+
+	useLayoutEffect(() => {
+		if (
+			contextData.posX + contextRef.current?.offsetWidth >
+			window.innerWidth
+		) {
+			console.log('hi');
+			setContextData({
+				...contextData,
+				posX: contextData.posX - contextRef.current?.offsetWidth,
+				closeToWindowSide: 'right',
+			});
+		}
+		if (
+			contextData.posY + contextRef.current?.offsetHeight >
+			window.innerHeight
+		) {
+			console.log('bye');
+			setContextData({
+				...contextData,
+				posY: contextData.posY - contextRef.current?.offsetHeight,
+			});
+		}
+	}, [contextData]);
 
 	const deleteEvent = e => {
 		dispatch({ type: 'delete', payload: selectedEvent });
@@ -51,7 +105,23 @@ function EventModal() {
 	};
 
 	return (
-		<div className='modal-container'>
+		<div
+			className={`modal-container ${
+				contextMenuAnimation &&
+				`eventModal-${
+					contextData.closeToWindowSide === 'right'
+						? 'animation-right'
+						: 'animation-left'
+				}`
+			}`}
+			ref={contextRef}
+			style={{
+				display: contextData.visible ? 'block' : 'none',
+				left: contextData.posX,
+				top: contextData.posY + 10,
+			}}
+			onAnimationEnd={() => setContextMenuAnimation(false)}
+		>
 			<div className='modal-header'>
 				{selectedEvent && (
 					<img

@@ -124,9 +124,9 @@ function HourlyDay({ day }) {
 							}}
 							onClick={() => {
 								if (overlappingEvent !== undefined) {
-									setDaySelected(day);
 									setSelectedEvent(overlappingEvent);
 								}
+								setDaySelected(day);
 								setShowModal(true);
 							}}
 						>

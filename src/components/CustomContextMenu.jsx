@@ -11,14 +11,21 @@ import check from '../assets/check.png';
 import removeEvent from '../assets/delete-event.png';
 
 const MyCustomContextMenu = ({ points }) => {
-	const { selectedEvent, setSelectedEvent, dispatch, setShowModal } =
-		useContext(CalenderContext);
+	const {
+		selectedEvent,
+		setSelectedEvent,
+		dispatch,
+		setShowModal,
+		contextMenuAnimation,
+		setContextMenuAnimation,
+	} = useContext(CalenderContext);
 	const bookmarkColors = ['indigo', 'gray', 'green', 'blue', 'red', 'purple'];
 
 	const [contextData, setContextData] = useState({
 		posX: points.x,
 		posY: points.y,
 		visible: true,
+		closeToWindowSide: 'left',
 	});
 	const contextRef = useRef(null);
 
@@ -42,6 +49,7 @@ const MyCustomContextMenu = ({ points }) => {
 			setContextData({
 				...contextData,
 				posX: contextData.posX - contextRef.current?.offsetWidth,
+				closeToWindowSide: 'right',
 			});
 		}
 		if (
@@ -73,12 +81,20 @@ const MyCustomContextMenu = ({ points }) => {
 	return (
 		<div
 			ref={contextRef}
-			className='contextMenu'
+			className={`contextMenu ${
+				contextMenuAnimation &&
+				`contextMenu-${
+					contextData.closeToWindowSide === 'right'
+						? 'animation-right'
+						: 'animation-left'
+				}`
+			}`}
 			style={{
 				display: contextData.visible ? 'block' : 'none',
 				left: contextData.posX,
-				top: contextData.posY,
+				top: contextData.posY + 10,
 			}}
+			onAnimationEnd={() => setContextMenuAnimation(false)}
 		>
 			<div className='modal contextMenu-delete' onClick={deleteEvent}>
 				<img src={removeEvent} alt='' className='modal-image' />

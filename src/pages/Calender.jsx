@@ -19,17 +19,22 @@ function Calender() {
 		setMouseRightClick,
 		mouseRightClick,
 		rightClickPoints,
+		setSelectedEvent,
 	} = useContext(CalenderContext);
 
 	useEffect(() => {
-		const handleClick = () => setMouseRightClick(false);
+		const handleClick = () => {
+			// setSelectedEvent(null);
+			//^^ If this is not here, when I right click on an event, and then click on an empty date, the event will fill up the new event
+			setMouseRightClick(false);
+		};
 		window.addEventListener('click', handleClick);
 		window.addEventListener('contextmenu', handleClick);
 		return () => {
 			window.removeEventListener('click', handleClick);
 			window.addEventListener('contextmenu', handleClick);
 		};
-	});
+	}, []);
 
 	useEffect(() => {
 		setCurrentMonth(getMonth(monthIndex));

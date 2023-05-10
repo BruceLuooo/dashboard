@@ -3,6 +3,13 @@ import dayjs from 'dayjs';
 import HourlyDay from './HourlyDay';
 
 function CalenderWeek({ week }) {
+	const hours = [];
+
+	for (let i = 1; i < 24; i++) {
+		const hour = dayjs().startOf('day').add(i, 'hour');
+		hours.push(hour.format('h A'));
+	}
+
 	return (
 		<div className='table'>
 			<div className='week-header-container'>
@@ -18,36 +25,11 @@ function CalenderWeek({ week }) {
 					<div className='week-hour'>
 						<div className='hihi'></div>
 					</div>
-					<div className='week-hour'>
-						<div className='hihi'>1</div>
-					</div>
-					<div className='week-hour'>
-						<div className='hihi'>2</div>
-					</div>
-					<div className='week-hour'>
-						<div className='hihi'>3</div>
-					</div>
-					<div className='week-hour'>
-						<div className='hihi'>4</div>
-					</div>
-					<div className='week-hour'>
-						<div className='hihi'>5</div>
-					</div>
-					<div className='week-hour'>
-						<div className='hihi'>6</div>
-					</div>
-					<div className='week-hour'>
-						<div className='hihi'>7</div>
-					</div>
-					<div className='week-hour'>
-						<div className='hihi'>8</div>
-					</div>
-					<div className='week-hour'>
-						<div className='hihi'>9</div>
-					</div>
-					<div className='week-hour'>
-						<div className='hihi'>10</div>
-					</div>
+					{hours.map(hour => (
+						<div className='week-hour'>
+							<div className='hihi'>{hour}</div>
+						</div>
+					))}
 				</div>
 				<div className='week-day'>
 					{week.map((day, idx) => (

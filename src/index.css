@@ -122,8 +122,40 @@ button:hover {
 .calender-header-toggle {
   display: flex;
   justify-content: flex-end;
-  max-width: 1040px;
-  width: 100%;
+  width: 160px;
+  position: relative;
+}
+.calender-header-toggle > button:nth-child(2) {
+  z-index: 100;
+  width: 80px;
+  border-bottom-right-radius: 0%;
+  border-top-right-radius: 0%;
+  background-color: transparent;
+}
+.calender-header-toggle > button:nth-child(3) {
+  z-index: 100;
+  width: 80px;
+  border-bottom-left-radius: 0%;
+  border-top-left-radius: 0%;
+  background-color: transparent;
+}
+.background {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  background-color: green;
+  transform: translateX(-100%);
+  transition: 0.2s;
+}
+.left {
+  border-bottom-left-radius: 6px;
+  border-top-left-radius: 6px;
+  transform: translateX(-100%);
+}
+.right {
+  border-bottom-right-radius: 6px;
+  border-top-right-radius: 6px;
+  transform: translateX(0%);
 }
 
 .calender-header-arrow {
@@ -134,16 +166,102 @@ button:hover {
   transform: rotate(180deg);
 }
 
+.border {
+  border: 2px solid gray;
+}
 .calender-month-container {
   display: grid;
   grid-template-columns: repeat(7, 1fr) ;
   grid-template-rows: repeat(6, 150px);
 }
+
 .calender-day-container {
   display: flex;
   flex-direction: column;
-  border: 1px solid gray;
+  border-right: 1px solid gray;
+  border-bottom: 1px solid gray;
 }
+
+.animate-enter-right {
+  transform: translateX(-16px);
+  opacity: 0;
+}
+.from-right {
+  animation-name: animate-enter-right;
+  animation-duration: 0.1s;
+  animation-fill-mode: forwards;
+}
+.animate-enter-left {
+  transform: translateX(16px);
+  opacity: 0;
+}
+.from-left {
+  animation-name: animate-enter-left;
+  animation-duration: 0.1s;
+  animation-fill-mode: forwards;
+}
+
+
+.animate-leave-left {
+  transform: translateX(0%);
+  animation-name: animate-leave-left;
+  animation-iteration-count: 1;
+  animation-duration: 0.1s;
+  animation-fill-mode: forwards;
+}
+.animate-leave-right {
+  transform: translateX(0%);
+  animation-name: animate-leave-right;
+  animation-iteration-count: 1;
+  animation-duration: 0.1s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes animate-enter-left {
+  0% {
+    opacity: 0.2;
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0%);
+  }
+}
+@keyframes animate-enter-right {
+  0% {
+    opacity: 0.2;
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0%);
+  }
+}
+@keyframes animate-leave-left {
+  0% {
+    opacity: 0.5;
+    transform: translateX(0%);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+}
+@keyframes animate-leave-right {
+  0% {
+    opacity: 0.5;
+    transform: translateX(0%);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+}
+
 .hourly-day-container {
   display: flex;
   flex-direction: column;
@@ -208,12 +326,9 @@ button:hover {
 .modal-container {
   display: flex;
   flex-direction: column;
-  position: fixed;
+  position: absolute;
   width: 450px;
   height: 350px;
-  left: 50%;
-  top: 50%;
-  transform: translate(-20%, -80%);
   background-color: white;
   border-radius: 6px;
   z-index: 2000;
@@ -328,12 +443,42 @@ button:hover {
   flex-direction: column;
   align-items: center;
   position: absolute;
-  height: auto;
+  height: fit-content;
   width: fit-content;
   background-color: white;
   border-radius: 6px;
   z-index: 20;
+  
 }
+.contextMenu-animation-right {
+  animation: fade-in-context-menu 0.2s forwards;
+  transform-origin: top right;
+}
+.contextMenu-animation-left {
+  animation: fade-in-context-menu 0.2s forwards;
+  transform-origin: top left;
+}
+
+/* .eventModal-animation-left {
+  animation: fade-in-context-menu 0.2s forwards;
+  transform-origin: left;
+}
+.eventModal-animation-right {
+  animation: fade-in-context-menu 0.2s forwards;
+  transform-origin: right;
+} */
+
+@keyframes fade-in-context-menu {
+  0%{
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  100%{
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 .contextMenu-delete {
   padding: 12px 16px 2px;
   cursor: pointer;
@@ -353,6 +498,7 @@ button:hover {
 }
 .calender-week-header-container {
  display: flex;
+ 
 }
 .calender-week-header-empty-space{
   background-color: green;
@@ -378,14 +524,14 @@ button:hover {
   grid-template-columns: repeat(7, 1fr);
 }
 .week-header-container > div:nth-child(1) {
-  border: 1px solid black;
+  border: 1px solid white;
 
 }
 .week-header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 1px solid black;
+  border: 1px solid white;
   border-left: none;
 }
 .week-header > div:nth-child(1) {
@@ -397,36 +543,32 @@ button:hover {
 
 .week-day-container {
   display: flex;
-  max-height: 900px;
-  overflow:scroll;
+  /* max-height: 900px; */
+  /* overflow: scroll; */
 }
 .week-time-slots {
   display: flex;
   flex-direction: column;
-  width: 18px;
+  width: 40px;
   text-align: right;
   padding-right: 8px;
   border: 1px solid white;
-  position: relative
+  position: relative;
 }
 .week-hour {
-  height: 73px;
+  height: 72px;
   font-size: 12px;
   position: relative;
 }
 .hihi {
   position: relative;
-  top: -6px;
+  top: -8px;
 }
 .week-day {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-
   width: 100%;
 }
-
-
-
 
 @media screen and (max-width: 1283px) {
 

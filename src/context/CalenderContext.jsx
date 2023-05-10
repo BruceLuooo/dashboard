@@ -27,6 +27,13 @@ export const CalenderProvider = ({ children }) => {
 	const [mouseRightClick, setMouseRightClick] = useState(false);
 	const [rightClickPoints, setRightClickPoints] = useState({ x: 0, y: 0 });
 	const [state, dispatch] = useReducer(eventsReducer, events);
+	const [contextMenuAnimation, setContextMenuAnimation] = useState(false);
+
+	//This is for event modal animation to get the coordinates to see weather or not it displays from the left side or the right side of the event
+	const [mouseLeftClick, setMouseLeftClick] = useState({ x: 0, y: 0 });
+
+	const [mounted, setMounted] = useState(false);
+	const [direction, setDirection] = useState('left');
 
 	useEffect(() => {
 		if (showModal == false) {
@@ -89,6 +96,14 @@ export const CalenderProvider = ({ children }) => {
 				mouseRightClick,
 				setRightClickPoints,
 				rightClickPoints,
+				mounted,
+				setMounted,
+				direction,
+				setDirection,
+				setContextMenuAnimation,
+				contextMenuAnimation,
+				mouseLeftClick,
+				setMouseLeftClick,
 			}}
 		>
 			{children}
