@@ -114,9 +114,53 @@ button:hover {
   gap: 26px;
 }
 
-.calender-header-bookmark{
+.calender-header-bookmarks{
   display: flex;
   gap: 6px;
+  position: relative;
+}
+
+
+.ripple-button {
+  padding: 12px 50px;
+  border: none;
+  border-radius: 5px;
+  background-color: #1abc9c;
+  color: #fff;
+  font-size: 18px;
+  outline: none;
+  cursor: pointer;
+ position: relative;
+  overflow: hidden;
+  box-shadow: 6px 7px 40px -4px
+          rgba(0, 0, 0, 0.2);
+}
+.ripple-button > span {
+  position: absolute;
+  border-radius: 50%;
+  /* To  it round */
+  background-color: rgba(0, 0, 0, 0.3);
+
+  width: 100px;
+  height: 100px;
+  margin-top: -50px;
+  /* for positioning */
+  margin-left: -50px;
+
+  animation: ripple 1s;
+}
+
+/* Add animation */
+@keyframes ripple {
+  0% {
+      opacity: 1;
+      transform: scale(0.5);
+  }
+
+  100% {
+      opacity: 0;
+      transform: scale(10);
+  }
 }
 
 .calender-header-toggle {
@@ -131,6 +175,24 @@ button:hover {
   border-bottom-right-radius: 0%;
   border-top-right-radius: 0%;
   background-color: transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.month-button {
+  position: absolute;
+  border-radius: 50%;
+  /* To  it round */
+  background-color: rgba(0, 0, 0, 0.3);
+
+  width: 100px;
+  height: 100px;
+  margin-top: -50px;
+  /* for positioning */
+  margin-left: -50px;
+
+  animation: ripple 1s;
+  opacity: 0;
 }
 .calender-header-toggle > button:nth-child(3) {
   z-index: 100;
@@ -138,7 +200,24 @@ button:hover {
   border-bottom-left-radius: 0%;
   border-top-left-radius: 0%;
   background-color: transparent;
+  position: relative;
+  overflow: hidden;
 }
+
+.bookmark-modal-container{
+  position: absolute;
+  top: 40px;
+  width: 100%;
+  border: 1px solid white;
+  background-color: blue;
+  z-index: 100;
+}
+.calendar-bookmark {
+  display: flex;
+  width: 100%;
+  gap: 10px;
+}
+
 .background {
   position: absolute;
   width: 50%;
@@ -173,6 +252,8 @@ button:hover {
   display: grid;
   grid-template-columns: repeat(7, 1fr) ;
   grid-template-rows: repeat(6, 150px);
+  position: relative;
+
 }
 
 .calender-day-container {
@@ -180,11 +261,11 @@ button:hover {
   flex-direction: column;
   border-right: 1px solid gray;
   border-bottom: 1px solid gray;
+  position: relative;
 }
 
 .animate-enter-right {
-  transform: translateX(-16px);
-  opacity: 0;
+  transform: translateX(16px);
 }
 .from-right {
   animation-name: animate-enter-right;
@@ -192,8 +273,7 @@ button:hover {
   animation-fill-mode: forwards;
 }
 .animate-enter-left {
-  transform: translateX(16px);
-  opacity: 0;
+  transform: translateX(-16px);
 }
 .from-left {
   animation-name: animate-enter-left;
@@ -203,14 +283,12 @@ button:hover {
 
 
 .animate-leave-left {
-  transform: translateX(0%);
   animation-name: animate-leave-left;
   animation-iteration-count: 1;
   animation-duration: 0.1s;
   animation-fill-mode: forwards;
 }
 .animate-leave-right {
-  transform: translateX(0%);
   animation-name: animate-leave-right;
   animation-iteration-count: 1;
   animation-duration: 0.1s;
@@ -219,10 +297,7 @@ button:hover {
 
 @keyframes animate-enter-left {
   0% {
-    opacity: 0.2;
-  }
-  25% {
-    opacity: 1;
+    opacity: 0.5;
   }
   100% {
     opacity: 1;
@@ -231,10 +306,7 @@ button:hover {
 }
 @keyframes animate-enter-right {
   0% {
-    opacity: 0.2;
-  }
-  25% {
-    opacity: 1;
+    opacity: 0.5;
   }
   100% {
     opacity: 1;
@@ -243,17 +315,7 @@ button:hover {
 }
 @keyframes animate-leave-left {
   0% {
-    opacity: 0.5;
-    transform: translateX(0%);
-  }
-  100% {
-    opacity: 0;
-    transform: translateX(16px);
-  }
-}
-@keyframes animate-leave-right {
-  0% {
-    opacity: 0.5;
+    opacity: 1;
     transform: translateX(0%);
   }
   100% {
@@ -261,12 +323,21 @@ button:hover {
     transform: translateX(-16px);
   }
 }
+@keyframes animate-leave-right {
+  0% {
+    opacity: 1;
+    transform: translateX(0%);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+}
 
 .hourly-day-container {
   display: flex;
   flex-direction: column;
   border: 1px solid gray;
-
 }
 .hourly-day {
   position: relative;
@@ -297,11 +368,16 @@ button:hover {
 .calender-date {
   font-size: 16px;
   margin-top: 12px;
+  pointer-events: none;
+  user-select: none;
 }
 .current-date {
   background-color: blue;
   border-radius: 50%;
   padding: 0 6px;
+}
+.current {
+  color: blue;
 }
 .not-current-month {
   color: rgb(88, 88, 88);
@@ -316,6 +392,7 @@ button:hover {
   font-size: 14px;
   padding-left: 6px;
   margin-top: 4px;
+  position: relative;
 }
 .all-events-popup {
   background-color: white;
@@ -331,7 +408,7 @@ button:hover {
   height: 350px;
   background-color: white;
   border-radius: 6px;
-  z-index: 2000;
+  z-index: 3000;
   box-shadow: 0px 10px 13px -7px #000000, 5px 5px 15px 5px rgba(0,0,0,0);
 }
 
@@ -382,6 +459,50 @@ button:hover {
 .layout {
   margin: 12px 16px 2px;
 }
+.time-period {
+  display: flex;
+  margin-left: 10px;
+  gap: 10px;
+}
+.time-period-select {
+  position: relative;
+}
+.time-period-select:hover {
+  background-color: rgb(232, 230, 230);
+}
+.time-period-modal {
+  position: absolute;
+  background-color: pink;
+  width: 200px;
+  height: 230px;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+.time-period-modal-active {
+  background-color: blue;
+  height: 2px;
+  transform-origin: center ;
+  transition: 0.3s;
+  transform: scale(0);
+  position: absolute;
+  bottom: 0;
+}
+.underline {
+  transform: scale(1);
+  width: 100%;
+}
+
+.time-slots {
+  padding: 10px 24px;
+  font-size: 15px;
+}
+.time-slots:hover {
+  background-color: lightgray;
+}
+.current-selected-time {
+  background-color: lightgray;
+}
+
 .modal-time {
   margin-left: 20px;
 }
@@ -459,14 +580,14 @@ button:hover {
   transform-origin: top left;
 }
 
-/* .eventModal-animation-left {
-  animation: fade-in-context-menu 0.2s forwards;
+.eventModal-animation-left {
+  animation: fade-in-left-event-modal 0.2s forwards;
   transform-origin: left;
 }
 .eventModal-animation-right {
-  animation: fade-in-context-menu 0.2s forwards;
+  animation: fade-in-right-event-modal 0.2s forwards;
   transform-origin: right;
-} */
+}
 
 @keyframes fade-in-context-menu {
   0%{
@@ -476,6 +597,27 @@ button:hover {
   100%{
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+@keyframes fade-in-right-event-modal {
+  0%{
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  100%{
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes fade-in-left-event-modal {
+  0%{
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100%{
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 
@@ -517,11 +659,24 @@ button:hover {
   flex-direction: column;
   margin-top: 10px;
   width: 100%;
+  position: relative;
 } 
+.week-container {
+  display: flex;
+  padding-right: 16px;
+  position: relative;
+}
+
+.week-header-gap {
+  width: 40px;
+  text-align: right;
+  padding-right: 8px;
+}
 
 .week-header-container {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
+  width: 100%;
 }
 .week-header-container > div:nth-child(1) {
   border: 1px solid white;
@@ -543,8 +698,8 @@ button:hover {
 
 .week-day-container {
   display: flex;
-  /* max-height: 900px; */
-  /* overflow: scroll; */
+  max-height: 850px;
+  overflow: scroll;
 }
 .week-time-slots {
   display: flex;
@@ -553,7 +708,7 @@ button:hover {
   text-align: right;
   padding-right: 8px;
   border: 1px solid white;
-  position: relative;
+  height: 1728px;
 }
 .week-hour {
   height: 72px;

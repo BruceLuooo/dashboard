@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
@@ -7,6 +7,7 @@ dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 dayjs.extend(isBetween);
 import CalenderContext from '../../context/CalenderContext';
+import EventModal from './EventModal';
 
 function HourlyDay({ day }) {
 	const {
@@ -21,6 +22,15 @@ function HourlyDay({ day }) {
 		activeBookmarks,
 		setMouseRightClick,
 		setRightClickPoints,
+		showModal,
+		daySelected,
+		setMouseLeftClick,
+		setContextMenuAnimation,
+		// startTime,
+		// setStartTime,
+		setWeekStartTime,
+		isSame,
+		setIsSame,
 	} = useContext(CalenderContext);
 
 	const [dayEvents, setDayEvents] = useState([]);
@@ -72,6 +82,8 @@ function HourlyDay({ day }) {
 		setSelectedEvent(null);
 	};
 
+	const eventBannerRef = useRef(null);
+
 	return (
 		<div className='hourly-day-container'>
 			{timeSlots.map((time, index) => {
@@ -96,10 +108,12 @@ function HourlyDay({ day }) {
 						style={{ position: 'relative', height: '18px' }}
 						onDragOver={handleDragOver}
 						onDrop={e => handleDrop(e, time.current)}
+						ref={eventBannerRef}
 					>
 						<div
-							// onClick={() => handleClick(time)}
-							className={`time-interval ${overlappingEvent ? 'selected' : ''} `}
+							className={`time-interval ${
+								overlappingEvent ? `selected ${overlappingEvent.bookmark}` : ''
+							} `}
 							style={{
 								borderTop: time.isStartOfHour ? '1px solid black' : 'none',
 								position: overlappingEvent && 'absolute',
@@ -111,7 +125,9 @@ function HourlyDay({ day }) {
 								if (overlappingEvent) {
 									e.preventDefault();
 									e.stopPropagation();
+									setContextMenuAnimation(true);
 									setSelectedEvent(overlappingEvent);
+									setShowModal(false);
 									setRightClickPoints({ x: e.clientX, y: e.clientY });
 									setMouseRightClick(true);
 								}
@@ -122,12 +138,16 @@ function HourlyDay({ day }) {
 									handleDragStart(overlappingEvent);
 								}
 							}}
-							onClick={() => {
+							onClick={e => {
 								if (overlappingEvent !== undefined) {
 									setSelectedEvent(overlappingEvent);
 								}
 								setDaySelected(day);
+								setWeekStartTime(time.current.format('h:mm A'));
+								setIsSame(time.current.format('YYYY-MM-DDTHH:mm:ss'));
 								setShowModal(true);
+								setMouseLeftClick({ x: e.clientX, y: e.clientY });
+								setContextMenuAnimation(true);
 							}}
 						>
 							<div style={{ userSelect: 'none' }}>
@@ -135,18 +155,20 @@ function HourlyDay({ day }) {
 							</div>
 							{overlappingEvent ? (
 								<div style={{ zIndex: '1000' }}>
-									<div className='testing' style={{ position: 'relative' }}>
-										{overlappingEvent.title}
-									</div>
 									<div className='testing'>
 										{dayjs(overlappingEvent.start).format('h:mmA')} -{' '}
 										{dayjs(overlappingEvent.end).format('h:mmA')}
 									</div>
+									<div style={{ color: 'black' }}>{overlappingEvent.title}</div>
 								</div>
 							) : (
 								<div className='invis'>bye</div>
 							)}
 						</div>
+						{showModal &&
+							time.current.format('YYYY-MM-DDTHH:mm:ss') === isSame && (
+								<EventModal eventBannerRef={eventBannerRef} />
+							)}
 					</div>
 				);
 			})}

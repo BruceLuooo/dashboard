@@ -5,7 +5,6 @@ import CalenderMonth from '../components/calender/CalenderMonth';
 import CalenderWeek from '../components/calender/CalenderWeek';
 import CalenderContext from '../context/CalenderContext';
 import { getMonth, getWeek } from '../utils/util';
-import EventModal from '../components/calender/EventModal';
 import CustomContextMenu from '../components/CustomContextMenu';
 
 function Calender() {
@@ -20,6 +19,7 @@ function Calender() {
 		mouseRightClick,
 		rightClickPoints,
 		setSelectedEvent,
+		setWeekStartTime,
 	} = useContext(CalenderContext);
 
 	useEffect(() => {
@@ -27,6 +27,7 @@ function Calender() {
 			// setSelectedEvent(null);
 			//^^ If this is not here, when I right click on an event, and then click on an empty date, the event will fill up the new event
 			setMouseRightClick(false);
+			setWeekStartTime(null);
 		};
 		window.addEventListener('click', handleClick);
 		window.addEventListener('contextmenu', handleClick);
@@ -59,7 +60,6 @@ function Calender() {
 					<CalenderWeek week={currentWeek} />
 				)}
 			</div>
-			{showModal && <EventModal />}
 			{mouseRightClick && <CustomContextMenu points={rightClickPoints} />}
 		</div>
 	);

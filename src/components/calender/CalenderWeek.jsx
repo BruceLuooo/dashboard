@@ -1,6 +1,7 @@
-import React from 'react';
+import { useContext } from 'react';
 import dayjs from 'dayjs';
 import HourlyDay from './HourlyDay';
+import CalenderContext from '../../context/CalenderContext';
 
 function CalenderWeek({ week }) {
 	const hours = [];
@@ -10,15 +11,45 @@ function CalenderWeek({ week }) {
 		hours.push(hour.format('h A'));
 	}
 
+	const { direction, mounted, setMounted, showModal } =
+		useContext(CalenderContext);
+
+	const onAnimationEnd = () => {
+		setMounted(false);
+	};
+
+	function getActiveClass(day) {
+		if (day.format('DD-MM-YY') === dayjs().format('DD-MM-YY')) {
+			return true;
+		}
+	}
+
 	return (
-		<div className='table'>
-			<div className='week-header-container'>
-				{week.map((day, index) => (
-					<div className='week-header' key={index}>
-						<div>{dayjs(day).format('ddd')}</div>
-						<div>{dayjs(day).format('DD')}</div>
-					</div>
-				))}
+		<div
+			className={`table ${
+				mounted
+					? `animate-leave-${direction}`
+					: `animate-enter-${direction === 'left' ? 'right' : 'left'} ${
+							direction === 'left' ? 'from-right' : 'from-left'
+					  }`
+			}`}
+			onAnimationEnd={onAnimationEnd}
+			key={week}
+		>
+			<div className='week-container'>
+				<div className='week-header-gap'></div>
+				<div className='week-header-container'>
+					{week.map((day, index) => (
+						<div className='week-header' key={index}>
+							<div className={`${getActiveClass(day) && 'current'}`}>
+								{dayjs(day).format('ddd')}
+							</div>
+							<div className={`${getActiveClass(day) && 'current-date'}`}>
+								{dayjs(day).format('DD')}
+							</div>
+						</div>
+					))}
+				</div>
 			</div>
 			<div className='week-day-container'>
 				<div className='week-time-slots'>

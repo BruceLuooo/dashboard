@@ -1,6 +1,9 @@
 import { useState, createContext, useEffect, useReducer, useMemo } from 'react';
 import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { events } from '../constants/dummyData';
+
+dayjs.extend(customParseFormat);
 
 function eventsReducer(state, { type, payload }) {
 	switch (type) {
@@ -34,6 +37,8 @@ export const CalenderProvider = ({ children }) => {
 
 	const [mounted, setMounted] = useState(false);
 	const [direction, setDirection] = useState('left');
+	const [isSame, setIsSame] = useState(null);
+	const [weekStartTime, setWeekStartTime] = useState(null);
 
 	useEffect(() => {
 		if (showModal == false) {
@@ -104,6 +109,10 @@ export const CalenderProvider = ({ children }) => {
 				contextMenuAnimation,
 				mouseLeftClick,
 				setMouseLeftClick,
+				isSame,
+				setIsSame,
+				setWeekStartTime,
+				weekStartTime,
 			}}
 		>
 			{children}

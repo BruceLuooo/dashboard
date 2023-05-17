@@ -1,10 +1,12 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import dayjs from 'dayjs';
 import CalenderContext from '../../context/CalenderContext';
+import EventModal from './EventModal';
 
 function CalenderDay({ day, rowIdx }) {
 	const {
 		setDaySelected,
+		daySelected,
 		setShowModal,
 		setSelectedEvent,
 		selectedEvent,
@@ -17,7 +19,10 @@ function CalenderDay({ day, rowIdx }) {
 		setRightClickPoints,
 		setContextMenuAnimation,
 		setMouseLeftClick,
+		showModal,
 	} = useContext(CalenderContext);
+
+	const eventBannerRef = useRef(null);
 
 	const [dayEvents, setDayEvents] = useState([]);
 	const [allDayEvents, setAllDayEvents] = useState([]);
@@ -25,7 +30,7 @@ function CalenderDay({ day, rowIdx }) {
 
 	useEffect(() => {
 		const events = getFilteredEvents.filter(
-			event => dayjs(event.date).format('DD-MM-YY') === day.format('DD-MM-YY'),
+			event => dayjs(event.start).format('DD-MM-YY') === day.format('DD-MM-YY'),
 		);
 
 		const test = events.slice(0, 3);
@@ -62,10 +67,19 @@ function CalenderDay({ day, rowIdx }) {
 
 	const handleDrop = (e, day) => {
 		e.preventDefault();
+
 		let newEventDate = selectedEvent;
-		newEventDate.date = dayjs(newEventDate.date).date(day.$D).month(day.$M);
+		newEventDate.start = dayjs(newEventDate.start)
+			.date(day.$D)
+			.month(day.$M)
+			.format('YYYY-MM-DDTHH:mm:ss');
+		newEventDate.end = dayjs(newEventDate.end)
+			.date(day.$D)
+			.month(day.$M)
+			.format('YYYY-MM-DDTHH:mm:ss');
 		dispatch({ type: 'update', payload: newEventDate });
 		setSelectedEvent(null);
+		setShowModal(false);
 	};
 
 	const showAllEvents = e => {
@@ -74,7 +88,7 @@ function CalenderDay({ day, rowIdx }) {
 	};
 
 	return (
-		<div className='calender-day-container'>
+		<div className='calender-day-container' ref={eventBannerRef}>
 			<div className='calender-day-header'>
 				{rowIdx === 0 && (
 					<span className='calender-date'>
@@ -82,7 +96,7 @@ function CalenderDay({ day, rowIdx }) {
 					</span>
 				)}
 				<span
-					className={`${
+					className={` ${
 						rowIdx !== 0 && 'calender-date'
 					} ${getActiveClass()} ${notCurrentMonth()}`}
 				>
@@ -95,6 +109,7 @@ function CalenderDay({ day, rowIdx }) {
 					setDaySelected(day);
 					setShowModal(true);
 					setMouseLeftClick({ x: e.clientX, y: e.clientY });
+					setContextMenuAnimation(true);
 				}}
 				onDragOver={handleDragOver}
 				onDrop={e => handleDrop(e, day)}
@@ -104,8 +119,6 @@ function CalenderDay({ day, rowIdx }) {
 						key={idx}
 						onClick={e => {
 							setSelectedEvent(evt);
-							setMouseLeftClick({ x: e.clientX, y: e.clientY });
-							setContextMenuAnimation(true);
 						}}
 						className={`${evt.bookmark} calender-day-event`}
 						draggable={true}
@@ -118,13 +131,15 @@ function CalenderDay({ day, rowIdx }) {
 							e.stopPropagation();
 							setContextMenuAnimation(true);
 							setSelectedEvent(evt);
+							setShowModal(false);
 							setRightClickPoints({ x: e.clientX, y: e.clientY });
 							setMouseRightClick(true);
 						}}
 					>
-						{evt.title}
+						<div>{evt.title}</div>
 					</div>
 				))}
+
 				{allDayEvents.length > dayEvents.length ? (
 					<div onClick={showAllEvents} className={`gray calender-day-event`}>
 						{allDayEvents.length - dayEvents.length} more
@@ -133,6 +148,9 @@ function CalenderDay({ day, rowIdx }) {
 					<div></div>
 				)}
 			</div>
+			{showModal && day === daySelected && (
+				<EventModal eventBannerRef={eventBannerRef} />
+			)}
 			{popup && (
 				<div
 					className='all-events-popup'
