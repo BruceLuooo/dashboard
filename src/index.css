@@ -297,7 +297,7 @@ button:hover {
 
 @keyframes animate-enter-left {
   0% {
-    opacity: 0.5;
+    opacity: 0;
   }
   100% {
     opacity: 1;
@@ -306,7 +306,7 @@ button:hover {
 }
 @keyframes animate-enter-right {
   0% {
-    opacity: 0.5;
+    opacity: 0;
   }
   100% {
     opacity: 1;
@@ -353,12 +353,17 @@ button:hover {
   top: 0;
   color: black;
 }
+.testingTwo {
+  z-index: 1000;
+}
+.testingThree{
+  z-index: 0;
+}
+
 .invis {
   display: none;
 }
-.selected {
-  background-color: aquamarine;
-}
+
 
 .calender-day-header {
   display: flex;
@@ -395,8 +400,30 @@ button:hover {
   position: relative;
 }
 .all-events-popup {
-  background-color: white;
+  background-color: grey;
   z-index: 10;
+  position: absolute;
+  top: 0px;
+  width: 200px;
+  padding: 8px;
+  border-radius: 6px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+.popup-align-center {
+  display: flex;
+  justify-content: center;
+}
+.close-all-events-popup{
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  background-color: black;
+  border-radius: 50%;
+  padding: 4px;
+  cursor: pointer;
+}
+.all-day-events {
+  z-index: 20;
   cursor: pointer;
 }
 
@@ -474,7 +501,7 @@ button:hover {
   position: absolute;
   background-color: pink;
   width: 200px;
-  height: 230px;
+  height: 205px;
   overflow: scroll;
   overflow-x: hidden;
 }
@@ -494,7 +521,7 @@ button:hover {
 
 .time-slots {
   padding: 10px 24px;
-  font-size: 15px;
+  font-size: 14px;
 }
 .time-slots:hover {
   background-color: lightgray;

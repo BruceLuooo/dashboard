@@ -15,7 +15,6 @@ function HourlyDay({ day }) {
 		setShowModal,
 		setSelectedEvent,
 		selectedEvent,
-		monthIndex,
 		state,
 		dispatch,
 		getFilteredEvents,
@@ -23,11 +22,8 @@ function HourlyDay({ day }) {
 		setMouseRightClick,
 		setRightClickPoints,
 		showModal,
-		daySelected,
 		setMouseLeftClick,
 		setContextMenuAnimation,
-		// startTime,
-		// setStartTime,
 		setWeekStartTime,
 		isSame,
 		setIsSame,
@@ -35,6 +31,7 @@ function HourlyDay({ day }) {
 
 	const [dayEvents, setDayEvents] = useState([]);
 	const [timeSlots, setTimeSlots] = useState([]);
+	const [editZindex, setEditZindex] = useState(false);
 
 	useEffect(() => {
 		const events = getFilteredEvents.filter(
@@ -63,6 +60,7 @@ function HourlyDay({ day }) {
 
 	const handleDragOver = e => {
 		e.preventDefault();
+		setEditZindex(true);
 	};
 
 	const handleDrop = (e, day) => {
@@ -80,6 +78,8 @@ function HourlyDay({ day }) {
 		newEventDate.end = dayjs(newEndTime).format('YYYY-MM-DDTHH:mm:ss');
 		dispatch({ type: 'update', payload: newEventDate });
 		setSelectedEvent(null);
+		setEditZindex(false);
+		setShowModal(false);
 	};
 
 	const eventBannerRef = useRef(null);
@@ -90,9 +90,7 @@ function HourlyDay({ day }) {
 				const overlappingEvent = dayEvents.find(event =>
 					time.current.isSame(event.start),
 				);
-
 				let eventDisplayHeight = 18;
-
 				if (overlappingEvent !== undefined) {
 					const duration = dayjs(overlappingEvent.end).diff(
 						overlappingEvent.start,
@@ -101,7 +99,6 @@ function HourlyDay({ day }) {
 
 					eventDisplayHeight = duration / 15;
 				}
-
 				return (
 					<div
 						key={index}
@@ -109,16 +106,21 @@ function HourlyDay({ day }) {
 						onDragOver={handleDragOver}
 						onDrop={e => handleDrop(e, time.current)}
 						ref={eventBannerRef}
+						onClick={e => {
+							e.stopPropagation();
+							setMouseRightClick(false);
+						}}
 					>
 						<div
 							className={`time-interval ${
-								overlappingEvent ? `selected ${overlappingEvent.bookmark}` : ''
-							} `}
+								overlappingEvent &&
+								`${overlappingEvent.bookmark} testingTwo ${
+									editZindex && 'testingThree'
+								}`
+							}  `}
 							style={{
 								borderTop: time.isStartOfHour ? '1px solid black' : 'none',
-								position: overlappingEvent && 'absolute',
 								height: overlappingEvent && `${eventDisplayHeight * 18}px`,
-								zIndex: overlappingEvent && '10',
 								width: '100%',
 							}}
 							onContextMenu={e => {
@@ -141,6 +143,8 @@ function HourlyDay({ day }) {
 							onClick={e => {
 								if (overlappingEvent !== undefined) {
 									setSelectedEvent(overlappingEvent);
+								} else {
+									setSelectedEvent(null);
 								}
 								setDaySelected(day);
 								setWeekStartTime(time.current.format('h:mm A'));
@@ -154,7 +158,7 @@ function HourlyDay({ day }) {
 								{time.current.format('h:mm A')}
 							</div>
 							{overlappingEvent ? (
-								<div style={{ zIndex: '1000' }}>
+								<div>
 									<div className='testing'>
 										{dayjs(overlappingEvent.start).format('h:mmA')} -{' '}
 										{dayjs(overlappingEvent.end).format('h:mmA')}

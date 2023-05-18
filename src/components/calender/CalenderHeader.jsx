@@ -217,7 +217,6 @@ function CalenderHeader({ setting, setViewSetting, currentWeek }) {
 					)}
 					Month
 				</button>
-				{/* <button onClick={displayMonth}>Month</button> */}
 				<button
 					onClick={e => {
 						displayWeek();
@@ -237,7 +236,6 @@ function CalenderHeader({ setting, setViewSetting, currentWeek }) {
 					)}
 					Week
 				</button>
-				{/* <button onClick={displayWeek}>Week</button> */}
 			</div>
 		</div>
 	);

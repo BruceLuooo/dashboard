@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect, useRef } from 'react';
 import dayjs from 'dayjs';
 import CalenderContext from '../../context/CalenderContext';
 import EventModal from './EventModal';
+import close from '../../assets/close.png';
 
 function CalenderDay({ day, rowIdx }) {
 	const {
@@ -43,7 +44,7 @@ function CalenderDay({ day, rowIdx }) {
 			setPopup(false);
 		}
 		addEventListener('click', handle);
-	});
+	}, []);
 
 	function getActiveClass() {
 		if (day.format('DD-MM-YY') === dayjs().format('DD-MM-YY')) {
@@ -59,10 +60,12 @@ function CalenderDay({ day, rowIdx }) {
 
 	const handleDragStart = event => {
 		setSelectedEvent(event);
+		setMouseRightClick(false);
 	};
 
 	const handleDragOver = e => {
 		e.preventDefault();
+		setPopup(false);
 	};
 
 	const handleDrop = (e, day) => {
@@ -84,7 +87,17 @@ function CalenderDay({ day, rowIdx }) {
 
 	const showAllEvents = e => {
 		e.stopPropagation();
-		setPopup(true);
+		setPopup(!popup);
+	};
+
+	const onContextMenu = (e, evt) => {
+		e.preventDefault();
+		e.stopPropagation();
+		setContextMenuAnimation(true);
+		setSelectedEvent(evt);
+		setShowModal(false);
+		setRightClickPoints({ x: e.clientX, y: e.clientY });
+		setMouseRightClick(true);
 	};
 
 	return (
@@ -110,6 +123,11 @@ function CalenderDay({ day, rowIdx }) {
 					setShowModal(true);
 					setMouseLeftClick({ x: e.clientX, y: e.clientY });
 					setContextMenuAnimation(true);
+					setMouseRightClick(false);
+					e.stopPropagation();
+					if (dayEvents.length === 0) {
+						setSelectedEvent(null);
+					}
 				}}
 				onDragOver={handleDragOver}
 				onDrop={e => handleDrop(e, day)}
@@ -124,16 +142,9 @@ function CalenderDay({ day, rowIdx }) {
 						draggable={true}
 						onDragStart={() => {
 							handleDragStart(evt);
-							setMouseRightClick(false);
 						}}
 						onContextMenu={e => {
-							e.preventDefault();
-							e.stopPropagation();
-							setContextMenuAnimation(true);
-							setSelectedEvent(evt);
-							setShowModal(false);
-							setRightClickPoints({ x: e.clientX, y: e.clientY });
-							setMouseRightClick(true);
+							onContextMenu(e, evt);
 						}}
 					>
 						<div>{evt.title}</div>
@@ -152,34 +163,52 @@ function CalenderDay({ day, rowIdx }) {
 				<EventModal eventBannerRef={eventBannerRef} />
 			)}
 			{popup && (
-				<div
-					className='all-events-popup'
-					onClick={e => {
-						setDaySelected(day);
-						setShowModal(true);
-						e.stopPropagation();
-					}}
-					onDragOver={handleDragOver}
-					onDrop={e => handleDrop(e, day)}
-				>
-					{allDayEvents.map((evt, idx) => (
-						<div
-							key={idx}
-							onClick={() => setSelectedEvent(evt)}
-							className={`${evt.bookmark} calender-day-event all-events-popup`}
-							draggable={true}
-							onDragStart={() => handleDragStart(evt)}
-							onContextMenu={e => {
-								e.preventDefault();
-								e.stopPropagation();
-								setSelectedEvent(evt);
-								setRightClickPoints({ x: e.clientX, y: e.clientY });
-								setMouseRightClick(true);
-							}}
-						>
-							{evt.title}
-						</div>
-					))}
+				<div className='all-events-popup'>
+					<div className='popup-align-center'>
+						{day.format('ddd').toUpperCase()}
+					</div>
+					<img
+						className='close-all-events-popup'
+						src={close}
+						alt='close popup'
+					/>
+					<div className='popup-align-center'>{day.get('date')}</div>
+					<div
+						onClick={e => {
+							setDaySelected(day);
+							setShowModal(true);
+							setMouseLeftClick({ x: e.clientX, y: e.clientY });
+							setContextMenuAnimation(true);
+							setMouseRightClick(false);
+							e.stopPropagation();
+						}}
+						onDragOver={handleDragOver}
+						onDrop={e => {
+							handleDrop(e, day);
+						}}
+					>
+						{allDayEvents.map((evt, idx) => (
+							<div
+								key={idx}
+								onClick={() => setSelectedEvent(evt)}
+								className={`${evt.bookmark} calender-day-event all-day-events`}
+								draggable={true}
+								onDragStart={() => {
+									handleDragStart(evt);
+								}}
+								onContextMenu={e => {
+									e.preventDefault();
+									e.stopPropagation();
+									setSelectedEvent(evt);
+									setContextMenuAnimation(true);
+									setRightClickPoints({ x: e.clientX, y: e.clientY });
+									setMouseRightClick(true);
+								}}
+							>
+								{evt.title}
+							</div>
+						))}
+					</div>
 				</div>
 			)}
 		</div>
