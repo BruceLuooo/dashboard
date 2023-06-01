@@ -11,10 +11,12 @@ function ModalBookmark({ bookmark, setBookmark }) {
 				{bookmarkColors.map((color, index) => (
 					<div
 						key={index}
-						className={`modal-bookmark ${color}`}
+						className={`modal-bookmark ${color.color}`}
 						onClick={() => setBookmark(color)}
 					>
-						{color === bookmark && <img src={check} alt='' className='check' />}
+						{color.color === bookmark.color && (
+							<img src={check} alt='' className='check' />
+						)}
 					</div>
 				))}
 			</div>

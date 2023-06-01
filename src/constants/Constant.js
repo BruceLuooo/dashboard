@@ -7,10 +7,9 @@ export const sidebarOptions = [
 ];
 
 export const bookmarkColors = [
-	'indigo',
-	'gray',
-	'green',
-	'blue',
-	'red',
-	'purple',
+	{ color: 'indigo', name: 'Other' },
+	{ color: 'green', name: 'Food' },
+	{ color: 'blue', name: 'Meeting' },
+	{ color: 'red', name: 'Casual' },
+	{ color: 'purple', name: 'Event' },
 ];

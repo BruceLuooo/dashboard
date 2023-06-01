@@ -119,7 +119,7 @@ function CalenderHeader({ setting, setViewSetting, currentWeek }) {
 
 	return (
 		<div className='calender-header-container'>
-			<div className='calender-header-container'>
+			<div className='calender-header-left'>
 				<button onClick={e => today(e)} className='ripple-button'>
 					{isRippling && settings === 'today' && (
 						<span
@@ -143,13 +143,13 @@ function CalenderHeader({ setting, setViewSetting, currentWeek }) {
 						/>
 					</button>
 				</div>
-				<div>
+				<div className='current-month'>
 					{setting === 'month' ? (
-						<div>
+						<div className='current-month-font-size'>
 							{dayjs(new Date(dayjs().year(), monthIndex)).format('MMMM YYYY')}
 						</div>
 					) : (
-						<div>
+						<div className='current-month-font-size'>
 							{isSameMonth ? (
 								<div>
 									{dayjs(new Date(dayjs().add(weekIndex, 'week'))).format(
@@ -199,6 +199,7 @@ function CalenderHeader({ setting, setViewSetting, currentWeek }) {
 			<div className='calender-header-toggle'>
 				<div className={`background ${backgroundColor}`}></div>
 				<button
+					className={`${backgroundColor === 'left' ? 'white' : 'black'}`}
 					onClick={e => {
 						displayMonth();
 						const rect = e.target.getBoundingClientRect();
@@ -218,6 +219,7 @@ function CalenderHeader({ setting, setViewSetting, currentWeek }) {
 					Month
 				</button>
 				<button
+					className={`${backgroundColor === 'right' ? 'white' : 'black'}`}
 					onClick={e => {
 						displayWeek();
 						const rect = e.target.getBoundingClientRect();
@@ -227,7 +229,7 @@ function CalenderHeader({ setting, setViewSetting, currentWeek }) {
 				>
 					{isRippling && settings === 'weekss' && (
 						<span
-							className='month-button'
+							className={`month-button`}
 							style={{
 								left: coords.x,
 								top: coords.y,

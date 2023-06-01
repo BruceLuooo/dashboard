@@ -6,6 +6,7 @@ function ModalTitle({ title, setTitle }) {
 			<input
 				type='text'
 				placeholder='Add Title'
+				autoFocus
 				value={title}
 				onChange={e => setTitle(e.target.value)}
 			/>

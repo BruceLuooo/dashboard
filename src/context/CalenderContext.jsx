@@ -40,13 +40,13 @@ export const CalenderProvider = ({ children }) => {
 	const [isSame, setIsSame] = useState(null);
 	const [weekStartTime, setWeekStartTime] = useState(null);
 
-	const [bookmarks, setBookmarks] = useState([
-		{ bookmarkColor: 'purple', name: 'Event' },
-		{ bookmarkColor: 'green', name: 'Birthday' },
-		{ bookmarkColor: 'gray', name: 'Busines' },
-		{ bookmarkColor: 'blue', name: 'Meeting' },
-		{ bookmarkColor: 'red', name: 'Casual' },
-	]);
+	// const [bookmarks, setBookmarks] = useState([
+	// 	{ bookmarkColor: 'purple', name: 'Event' },
+	// 	{ bookmarkColor: 'green', name: 'Birthday' },
+	// 	{ bookmarkColor: 'gray', name: 'Busines' },
+	// 	{ bookmarkColor: 'blue', name: 'Meeting' },
+	// 	{ bookmarkColor: 'red', name: 'Casual' },
+	// ]);
 
 	useEffect(() => {
 		if (showModal == false) {
@@ -54,57 +54,82 @@ export const CalenderProvider = ({ children }) => {
 		}
 	}, [showModal]);
 
+	useEffect(() => {
+		const uniqueBookmarks = [];
+		state
+			.map(event => event.bookmark)
+			.filter(bookmark => {
+				const isUnique = !uniqueBookmarks.some(
+					uniqueBookmark =>
+						uniqueBookmark.color === bookmark.color &&
+						uniqueBookmark.name === bookmark.name,
+				);
+				if (isUnique) {
+					uniqueBookmarks.push(bookmark);
+					return true;
+				}
+				return false;
+			});
+
+		const updateActiveBookmarks = uniqueBookmarks.map(bookmark => {
+			const find = activeBookmarks.find(
+				activeBookmark => activeBookmark.bookmark.color === bookmark.color,
+			);
+			if (!find) {
+				return {
+					bookmark,
+					checked: true,
+				};
+			} else {
+				return {
+					bookmark,
+					checked: find.checked,
+				};
+			}
+		});
+		setActiveBookMarks(updateActiveBookmarks);
+	}, [state]);
 	// useEffect(() => {
 	// 	setActiveBookMarks(prevLabels => {
-	// 		return [
-	// 			...new Set(
-	// 				state.map(event => {
-	// 					return event.bookmark;
-	// 				}),
-	// 			),
-	// 		].map(bookmark => {
-	// 			const currentLabel = prevLabels.find(
-	// 				lbl => lbl.color === bookmark.color,
-	// 			);
+	// 		return [...new Set(state.map(event => event.bookmark))].map(color => {
+	// 			console.log(color);
+	// 			const currentLabel = prevLabels.find(lbl => lbl.color === color);
 	// 			return {
-	// 				color: bookmark.color,
-	// 				name: bookmark.name,
+	// 				color,
 	// 				checked: currentLabel ? currentLabel.checked : true,
 	// 			};
 	// 		});
 	// 	});
 	// }, [state]);
-	useEffect(() => {
-		setActiveBookMarks(prevLabels => {
-			return [...new Set(state.map(event => event.bookmark))].map(color => {
-				const currentLabel = prevLabels.find(lbl => lbl.color === color);
-				return {
-					color,
-					checked: currentLabel ? currentLabel.checked : true,
-				};
-			});
-		});
-	}, [state]);
 
-	const updateActiveBookmark = color => {
+	const updateActiveBookmark = selected => {
 		setActiveBookMarks(
-			activeBookmarks.map(bookmark =>
-				bookmark.color === color.color
-					? { color: color.color, checked: !color.checked }
-					: bookmark,
+			activeBookmarks.map(current =>
+				current.bookmark.color === selected.bookmark.color
+					? {
+							bookmark: {
+								color: current.bookmark.color,
+								name: current.bookmark.name,
+							},
+							checked: !selected.checked,
+					  }
+					: current,
 			),
 		);
 	};
 
 	const getFilteredEvents = useMemo(() => {
-		const filteredEvents = state.filter(event => {
-			return activeBookmarks
-				.filter(bookmark => bookmark.checked === true)
-				.map(bookmark => bookmark.color)
-				.includes(event.bookmark);
+		const findCheckedActiveBookmarks = activeBookmarks.filter(
+			activeBookmark => activeBookmark.checked === true,
+		);
+
+		const filteredEvent = state.filter(event => {
+			return findCheckedActiveBookmarks
+				.map(bookmark => bookmark.bookmark.color)
+				.includes(event.bookmark.color);
 		});
 
-		return filteredEvents;
+		return filteredEvent;
 	}, [state, activeBookmarks]);
 
 	return (

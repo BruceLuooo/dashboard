@@ -21,6 +21,7 @@ function CalenderDay({ day, rowIdx }) {
 		setContextMenuAnimation,
 		setMouseLeftClick,
 		showModal,
+		mounted,
 	} = useContext(CalenderContext);
 
 	const eventBannerRef = useRef(null);
@@ -101,7 +102,10 @@ function CalenderDay({ day, rowIdx }) {
 	};
 
 	return (
-		<div className='calender-day-container' ref={eventBannerRef}>
+		<div
+			className={`calender-day-container ${rowIdx === 0 && 'border-top'}`}
+			ref={eventBannerRef}
+		>
 			<div className='calender-day-header'>
 				{rowIdx === 0 && (
 					<span className='calender-date'>
@@ -111,7 +115,7 @@ function CalenderDay({ day, rowIdx }) {
 				<span
 					className={` ${
 						rowIdx !== 0 && 'calender-date'
-					} ${getActiveClass()} ${notCurrentMonth()}`}
+					} ${getActiveClass()} ${notCurrentMonth()} ${mounted && 'invisible'}`}
 				>
 					{day.format('DD')}
 				</span>
@@ -138,7 +142,9 @@ function CalenderDay({ day, rowIdx }) {
 						onClick={e => {
 							setSelectedEvent(evt);
 						}}
-						className={`${evt.bookmark} calender-day-event`}
+						className={`${evt.bookmark.color} calender-day-event ${
+							mounted && 'invisible'
+						}`}
 						draggable={true}
 						onDragStart={() => {
 							handleDragStart(evt);
@@ -152,7 +158,10 @@ function CalenderDay({ day, rowIdx }) {
 				))}
 
 				{allDayEvents.length > dayEvents.length ? (
-					<div onClick={showAllEvents} className={`gray calender-day-event`}>
+					<div
+						onClick={showAllEvents}
+						className={`gray calender-day-event ${mounted && 'invisible'}`}
+					>
 						{allDayEvents.length - dayEvents.length} more
 					</div>
 				) : (
@@ -191,7 +200,7 @@ function CalenderDay({ day, rowIdx }) {
 							<div
 								key={idx}
 								onClick={() => setSelectedEvent(evt)}
-								className={`${evt.bookmark} calender-day-event all-day-events`}
+								className={`${evt.bookmark.color} calender-day-event all-day-events`}
 								draggable={true}
 								onDragStart={() => {
 									handleDragStart(evt);

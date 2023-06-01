@@ -11,8 +11,7 @@ function CalenderWeek({ week }) {
 		hours.push(hour.format('h A'));
 	}
 
-	const { direction, mounted, setMounted, showModal } =
-		useContext(CalenderContext);
+	const { direction, mounted, setMounted } = useContext(CalenderContext);
 
 	const onAnimationEnd = () => {
 		setMounted(false);
@@ -44,7 +43,11 @@ function CalenderWeek({ week }) {
 							<div className={`${getActiveClass(day) && 'current'}`}>
 								{dayjs(day).format('ddd')}
 							</div>
-							<div className={`${getActiveClass(day) && 'current-date'}`}>
+							<div
+								className={`${getActiveClass(day) && 'current-date'}  ${
+									mounted && 'invisible'
+								}`}
+							>
 								{dayjs(day).format('DD')}
 							</div>
 						</div>

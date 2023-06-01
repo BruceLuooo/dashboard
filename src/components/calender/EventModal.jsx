@@ -26,12 +26,8 @@ function EventModal({ eventBannerRef }) {
 	const [description, setDescription] = useState(
 		selectedEvent ? selectedEvent.description : '',
 	);
-	const [bookmark, setBookmark] = useState(
-		selectedEvent ? selectedEvent.bookmark : 'indigo',
-	);
-	const [addPeople, setAddPeople] = useState(
-		selectedEvent ? selectedEvent.people : '',
-	);
+	const [bookmark, setBookmark] = useState({ color: '', name: '' });
+	const [addPeople, setAddPeople] = useState('');
 	const [startTime, setStartTime] = useState(
 		selectedEvent
 			? dayjs(selectedEvent.start).format('h:mm A')
@@ -56,7 +52,14 @@ function EventModal({ eventBannerRef }) {
 	useEffect(() => {
 		setTitle(selectedEvent ? selectedEvent.title : '');
 		setDescription(selectedEvent ? selectedEvent.description : '');
-		setBookmark(selectedEvent ? selectedEvent.bookmark : 'indigo');
+		setBookmark(
+			selectedEvent
+				? {
+						color: selectedEvent.bookmark.color,
+						name: selectedEvent.bookmark.name,
+				  }
+				: { color: 'indigo', name: 'Other' },
+		);
 		setAddPeople(selectedEvent ? selectedEvent.people : '');
 		setStartTime(
 			selectedEvent
@@ -138,6 +141,7 @@ function EventModal({ eventBannerRef }) {
 			}}
 			onAnimationEnd={() => setContextMenuAnimation(false)}
 			onClick={e => e.stopPropagation()}
+			onContextMenu={e => e.stopPropagation()}
 		>
 			<ModalTopBar />
 			<ModalTitle title={title} setTitle={setTitle} />

@@ -9,6 +9,7 @@ import CalenderContext from '../context/CalenderContext';
 import bookmarkLogo from '../assets/bookmark2.png';
 import check from '../assets/check.png';
 import removeEvent from '../assets/delete-event.png';
+import { bookmarkColors } from '../constants/Constant';
 
 const MyCustomContextMenu = ({ points }) => {
 	const {
@@ -19,7 +20,6 @@ const MyCustomContextMenu = ({ points }) => {
 		contextMenuAnimation,
 		setContextMenuAnimation,
 	} = useContext(CalenderContext);
-	const bookmarkColors = ['indigo', 'gray', 'green', 'blue', 'red', 'purple'];
 
 	const [contextData, setContextData] = useState({
 		posX: points.x,
@@ -30,7 +30,10 @@ const MyCustomContextMenu = ({ points }) => {
 	const contextRef = useRef(null);
 
 	const [bookmark, setBookmark] = useState(
-		selectedEvent ? selectedEvent.bookmark : '',
+		selectedEvent && {
+			color: selectedEvent.bookmark.color,
+			name: selectedEvent.bookmark.name,
+		},
 	);
 
 	useEffect(() => {
@@ -106,10 +109,10 @@ const MyCustomContextMenu = ({ points }) => {
 					{bookmarkColors.map((color, index) => (
 						<div
 							key={index}
-							className={`modal-bookmark ${color}`}
+							className={`modal-bookmark ${color.color}`}
 							onClick={() => updateEventBookmark(color)}
 						>
-							{color === bookmark && (
+							{color.color === bookmark.color && (
 								<img src={check} alt='' className='check' />
 							)}
 						</div>

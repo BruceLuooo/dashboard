@@ -114,12 +114,12 @@ function HourlyDay({ day }) {
 						<div
 							className={`time-interval ${
 								overlappingEvent &&
-								`${overlappingEvent.bookmark} testingTwo ${
+								`${overlappingEvent.bookmark.color} testingTwo ${
 									editZindex && 'testingThree'
 								}`
 							}  `}
 							style={{
-								borderTop: time.isStartOfHour ? '1px solid black' : 'none',
+								borderTop: time.isStartOfHour ? '1px solid #ededed' : 'none',
 								height: overlappingEvent && `${eventDisplayHeight * 18}px`,
 								width: '100%',
 							}}
@@ -163,7 +163,15 @@ function HourlyDay({ day }) {
 										{dayjs(overlappingEvent.start).format('h:mmA')} -{' '}
 										{dayjs(overlappingEvent.end).format('h:mmA')}
 									</div>
-									<div style={{ color: 'black' }}>{overlappingEvent.title}</div>
+									<div
+										style={{
+											color: 'white',
+											marginLeft: '6px',
+											marginTop: '4px',
+										}}
+									>
+										{overlappingEvent.title}
+									</div>
 								</div>
 							) : (
 								<div className='invis'>bye</div>

@@ -5,7 +5,7 @@ function Dashboard() {
 	return (
 		<div className='main-container'>
 			<Sidebar currentPage={'Dashboard'} />
-			<div>hi bitch</div>
+			<div>In Development</div>
 		</div>
 	);
 }
