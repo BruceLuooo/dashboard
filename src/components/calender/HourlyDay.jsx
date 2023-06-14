@@ -27,6 +27,7 @@ function HourlyDay({ day }) {
 		setWeekStartTime,
 		isSame,
 		setIsSame,
+		mounted,
 	} = useContext(CalenderContext);
 
 	const [dayEvents, setDayEvents] = useState([]);
@@ -117,7 +118,7 @@ function HourlyDay({ day }) {
 								`${overlappingEvent.bookmark.color} testingTwo ${
 									editZindex && 'testingThree'
 								}`
-							}  `}
+							}  ${mounted && 'invisible'}`}
 							style={{
 								borderTop: time.isStartOfHour ? '1px solid #ededed' : 'none',
 								height: overlappingEvent && `${eventDisplayHeight * 18}px`,
