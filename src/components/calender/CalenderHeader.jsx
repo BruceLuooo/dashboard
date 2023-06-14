@@ -10,11 +10,19 @@ function CalenderHeader({ setting, setViewSetting, currentWeek }) {
 		setMonthIndex,
 		weekIndex,
 		setWeekIndex,
-		activeBookmarks,
-		updateActiveBookmark,
 		setMounted,
 		setDirection,
 	} = useContext(CalenderContext);
+
+	window.addEventListener('scroll', function (e) {
+		console.log(e);
+		if (e.deltaY < 0) {
+			setMonthIndex(monthIndex + 1);
+		}
+		if (e.deltaY > 0) {
+			setMonthIndex(monthIndex - 1);
+		}
+	});
 
 	const next = () => {
 		if (setting === 'month') {

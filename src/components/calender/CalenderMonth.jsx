@@ -3,8 +3,7 @@ import CalenderDay from './CalenderDay';
 import CalenderContext from '../../context/CalenderContext';
 
 function CalenderMonth({ month }) {
-	const { direction, mounted, setMounted, showModal } =
-		useContext(CalenderContext);
+	const { direction, mounted, setMounted } = useContext(CalenderContext);
 
 	const onAnimationEnd = () => {
 		setMounted(false);

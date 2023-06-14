@@ -3,12 +3,11 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: dark light;
   background-color: white;
   --hover-color: #646cff;
   --hover-color-two: #464fff;
   --hover-color-three: #b3cee5;
-  --light-background: #ededed;
+  --light-background: #dbdbdb;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -419,15 +418,18 @@ button:hover {
   align-items: center;
 }
 .calender-date {
-  font-size: 16px;
-  margin-top: 12px;
+  font-size: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   pointer-events: none;
   user-select: none;
+  width: 30px;
+  height: 30px;
 }
 .current-date {
   background-color: rgb(26,115,232);
   border-radius: 50%;
-  padding: 1px 4px 1px 6px;
   color: white;
 }
 .current {
@@ -672,7 +674,7 @@ button:hover {
   background-color: white;
   border-radius: 6px;
   z-index: 20;
-  
+  border: 1px solid var(--light-background);
 }
 .contextMenu-animation-right {
   animation: fade-in-context-menu 0.2s forwards;
@@ -788,10 +790,10 @@ button:hover {
   align-items: center;
 }
 .week-header > div:nth-child(1) {
-  font-size: 14px;
+  font-size: 12px;
 }
 .week-header > div:nth-child(2) {
-  font-size: 20px;
+  font-size: 14px;
 }
 
 .week-day-container {

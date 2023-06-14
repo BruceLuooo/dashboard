@@ -64,7 +64,7 @@ function CalenderDay({ day, rowIdx }) {
 		setMouseRightClick(false);
 	};
 
-	const handleDragOver = e => {
+	const handleDragOver = (e, day) => {
 		e.preventDefault();
 		setPopup(false);
 	};
@@ -113,11 +113,11 @@ function CalenderDay({ day, rowIdx }) {
 					</span>
 				)}
 				<span
-					className={` ${
-						rowIdx !== 0 && 'calender-date'
-					} ${getActiveClass()} ${notCurrentMonth()} ${mounted && 'invisible'}`}
+					className={` ${getActiveClass()} ${notCurrentMonth()} ${
+						mounted && 'invisible'
+					} calender-date`}
 				>
-					{day.format('DD')}
+					{day.format('D')}
 				</span>
 			</div>
 			<div
@@ -133,7 +133,9 @@ function CalenderDay({ day, rowIdx }) {
 						setSelectedEvent(null);
 					}
 				}}
-				onDragOver={handleDragOver}
+				onDragOver={e => {
+					handleDragOver(e, day);
+				}}
 				onDrop={e => handleDrop(e, day)}
 			>
 				{dayEvents.map((evt, idx) => (
@@ -160,7 +162,9 @@ function CalenderDay({ day, rowIdx }) {
 				{allDayEvents.length > dayEvents.length ? (
 					<div
 						onClick={showAllEvents}
-						className={`gray calender-day-event ${mounted && 'invisible'}`}
+						className={`gray calender-day-event white ${
+							mounted && 'invisible'
+						}`}
 					>
 						{allDayEvents.length - dayEvents.length} more
 					</div>

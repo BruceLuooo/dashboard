@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Calender from './pages/Calender';
 import Dashboard from './pages/Dashboard';
-import { CalenderProvider } from './context/calenderContext';
+import { CalenderProvider } from './context/CalenderContext';
 
 function App() {
 	return (
@@ -9,6 +9,7 @@ function App() {
 			<Router>
 				<Routes>
 					<Route path='/calender' element={<Calender />} />
+					<Route path='/' element={<Calender />} />
 					<Route path='/dashboard' element={<Dashboard />} />
 				</Routes>
 			</Router>

@@ -44,11 +44,11 @@ function CalenderWeek({ week }) {
 								{dayjs(day).format('ddd')}
 							</div>
 							<div
-								className={`${getActiveClass(day) && 'current-date'}  ${
-									mounted && 'invisible'
-								}`}
+								className={`calender-date ${
+									getActiveClass(day) && 'current-date'
+								}  ${mounted && 'invisible'}`}
 							>
-								{dayjs(day).format('DD')}
+								{dayjs(day).format('D')}
 							</div>
 						</div>
 					))}
