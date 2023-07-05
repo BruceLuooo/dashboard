@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import menu from '../assets/menu.png';
 import SidebarPopup from './SidebarPopup';
 import { sidebarOptions } from '../constants/Constant';
+import logo from '../assets/vite.svg';
 
 function Sidebar({ currentPage }) {
 	useEffect(() => {
@@ -23,7 +24,10 @@ function Sidebar({ currentPage }) {
 				<button className='option-menu-button' onClick={openPopup}>
 					<img src={menu} alt='' className='option-image ' />
 				</button>
-				<span>Dashborder</span>
+				<img src={logo} alt='' className='logo' />
+				<span style={{ fontWeight: '600' }}>
+					Dash<span style={{ color: '#646cff' }}>border</span>
+				</span>
 			</div>
 			<div className='sidebar-options'>
 				{sidebarOptions.map((option, index) => (

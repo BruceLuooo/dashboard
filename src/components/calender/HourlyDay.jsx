@@ -55,6 +55,11 @@ function HourlyDay({ day }) {
 		setTimeSlots(slots);
 	}, [day]);
 
+	const onDragStart = () => {
+		if (overlappingEvent !== undefined) {
+			handleDragStart(overlappingEvent);
+		}
+	};
 	const handleDragStart = event => {
 		setSelectedEvent(event);
 	};
@@ -136,11 +141,7 @@ function HourlyDay({ day }) {
 								}
 							}}
 							draggable={true}
-							onDragStart={() => {
-								if (overlappingEvent !== undefined) {
-									handleDragStart(overlappingEvent);
-								}
-							}}
+							onDragStart={onDragStart}
 							onClick={e => {
 								if (overlappingEvent !== undefined) {
 									setSelectedEvent(overlappingEvent);
@@ -166,10 +167,10 @@ function HourlyDay({ day }) {
 									</div>
 									<div
 										style={{
-											color: 'white',
 											marginLeft: '6px',
 											marginTop: '4px',
 										}}
+										className='calender-week-event'
 									>
 										{overlappingEvent.title}
 									</div>

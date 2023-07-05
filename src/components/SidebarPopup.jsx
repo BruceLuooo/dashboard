@@ -8,12 +8,14 @@ function SidebarPopup({ setOpenSidebarPopup }) {
 	};
 
 	return (
-		<div>
+		<div style={{ height: '100%' }}>
 			<div className='sidebar-header-popup'>
 				<button className='option-menu-button-popup' onClick={closePopup}>
 					<img src={menu} alt='' className='option-image' />
 				</button>
-				<span>Dashborder</span>
+				<span style={{ fontWeight: '600' }}>
+					Dash<span style={{ color: '#646cff' }}>border</span>
+				</span>
 			</div>
 			<div className='sidebar-options-popup'>
 				{sidebarOptions.map((option, index) => (

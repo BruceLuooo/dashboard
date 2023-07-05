@@ -2,7 +2,8 @@ import React, { useState, useContext, useEffect, useRef } from 'react';
 import dayjs from 'dayjs';
 import CalenderContext from '../../context/CalenderContext';
 import EventModal from './EventModal';
-import close from '../../assets/close.png';
+import ShowAllEvents from './calendarDay/ShowAllEvents';
+import DisplayDate from './calendarDay/DisplayDate';
 
 function CalenderDay({ day, rowIdx }) {
 	const {
@@ -11,7 +12,6 @@ function CalenderDay({ day, rowIdx }) {
 		setShowModal,
 		setSelectedEvent,
 		selectedEvent,
-		monthIndex,
 		state,
 		dispatch,
 		getFilteredEvents,
@@ -46,18 +46,6 @@ function CalenderDay({ day, rowIdx }) {
 		}
 		addEventListener('click', handle);
 	}, []);
-
-	function getActiveClass() {
-		if (day.format('DD-MM-YY') === dayjs().format('DD-MM-YY')) {
-			return 'current-date';
-		}
-	}
-
-	function notCurrentMonth() {
-		if (day.$M !== monthIndex) {
-			return 'not-current-month';
-		}
-	}
 
 	const handleDragStart = event => {
 		setSelectedEvent(event);
@@ -101,38 +89,27 @@ function CalenderDay({ day, rowIdx }) {
 		setMouseRightClick(true);
 	};
 
+	const selectDay = e => {
+		setDaySelected(day);
+		setShowModal(true);
+		setMouseLeftClick({ x: e.clientX, y: e.clientY });
+		setContextMenuAnimation(true);
+		setMouseRightClick(false);
+		e.stopPropagation();
+		if (dayEvents.length === 0) {
+			setSelectedEvent(null);
+		}
+	};
+
 	return (
 		<div
 			className={`calender-day-container ${rowIdx === 0 && 'border-top'}`}
 			ref={eventBannerRef}
 		>
-			<div className='calender-day-header'>
-				{rowIdx === 0 && (
-					<span className='calender-date'>
-						{day.format('ddd').toUpperCase()}
-					</span>
-				)}
-				<span
-					className={` ${getActiveClass()} ${notCurrentMonth()} ${
-						mounted && 'invisible'
-					} calender-date`}
-				>
-					{day.format('D')}
-				</span>
-			</div>
+			<DisplayDate rowIdx={rowIdx} day={day} mounted={mounted} />
 			<div
 				className='calender-events'
-				onClick={e => {
-					setDaySelected(day);
-					setShowModal(true);
-					setMouseLeftClick({ x: e.clientX, y: e.clientY });
-					setContextMenuAnimation(true);
-					setMouseRightClick(false);
-					e.stopPropagation();
-					if (dayEvents.length === 0) {
-						setSelectedEvent(null);
-					}
-				}}
+				onClick={selectDay}
 				onDragOver={e => {
 					handleDragOver(e, day);
 				}}
@@ -159,7 +136,7 @@ function CalenderDay({ day, rowIdx }) {
 					</div>
 				))}
 
-				{allDayEvents.length > dayEvents.length ? (
+				{allDayEvents.length > dayEvents.length && (
 					<div
 						onClick={showAllEvents}
 						className={`gray calender-day-event white ${
@@ -168,61 +145,22 @@ function CalenderDay({ day, rowIdx }) {
 					>
 						{allDayEvents.length - dayEvents.length} more
 					</div>
-				) : (
-					<div></div>
 				)}
 			</div>
 			{showModal && day === daySelected && (
 				<EventModal eventBannerRef={eventBannerRef} />
 			)}
 			{popup && (
-				<div className='all-events-popup'>
-					<div className='popup-align-center'>
-						{day.format('ddd').toUpperCase()}
-					</div>
-					<img
-						className='close-all-events-popup'
-						src={close}
-						alt='close popup'
-					/>
-					<div className='popup-align-center'>{day.get('date')}</div>
-					<div
-						onClick={e => {
-							setDaySelected(day);
-							setShowModal(true);
-							setMouseLeftClick({ x: e.clientX, y: e.clientY });
-							setContextMenuAnimation(true);
-							setMouseRightClick(false);
-							e.stopPropagation();
-						}}
-						onDragOver={handleDragOver}
-						onDrop={e => {
-							handleDrop(e, day);
-						}}
-					>
-						{allDayEvents.map((evt, idx) => (
-							<div
-								key={idx}
-								onClick={() => setSelectedEvent(evt)}
-								className={`${evt.bookmark.color} calender-day-event all-day-events`}
-								draggable={true}
-								onDragStart={() => {
-									handleDragStart(evt);
-								}}
-								onContextMenu={e => {
-									e.preventDefault();
-									e.stopPropagation();
-									setSelectedEvent(evt);
-									setContextMenuAnimation(true);
-									setRightClickPoints({ x: e.clientX, y: e.clientY });
-									setMouseRightClick(true);
-								}}
-							>
-								{evt.title}
-							</div>
-						))}
-					</div>
-				</div>
+				<ShowAllEvents
+					day={day}
+					selectDay={selectDay}
+					handleDragOver={handleDragOver}
+					handleDrop={handleDrop}
+					setSelectedEvent={setSelectedEvent}
+					allDayEvents={allDayEvents}
+					handleDragStart={handleDragStart}
+					onContextMenu={onContextMenu}
+				/>
 			)}
 		</div>
 	);

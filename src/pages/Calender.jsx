@@ -14,7 +14,6 @@ function Calender() {
 	const {
 		monthIndex,
 		weekIndex,
-		showModal,
 		setShowModal,
 		setMouseRightClick,
 		mouseRightClick,
@@ -24,8 +23,6 @@ function Calender() {
 
 	useEffect(() => {
 		const handleClick = () => {
-			// setSelectedEvent(null);
-			//^^ If this is not here, when I right click on an event, and then click on an empty date, the event will fill up the new event
 			setMouseRightClick(false);
 			setShowModal(false);
 			setWeekStartTime(null);

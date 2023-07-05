@@ -18,11 +18,14 @@ function CalendarBookmark({ setOpenFilterModal }) {
 			onClick={e => e.stopPropagation()}
 		>
 			{activeBookmarks.map((activeBookmark, index) => (
-				<div key={index} className='calendar-bookmark'>
+				<div
+					key={index}
+					className='calendar-bookmark'
+					onClick={() => updateActiveBookmark(activeBookmark)}
+				>
 					<input
 						type='checkbox'
 						checked={activeBookmark.checked}
-						onChange={() => updateActiveBookmark(activeBookmark)}
 						style={{ accentColor: activeBookmark.bookmark.color }}
 						className='checkbox'
 					/>

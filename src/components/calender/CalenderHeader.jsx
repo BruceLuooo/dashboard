@@ -128,7 +128,7 @@ function CalenderHeader({ setting, setViewSetting, currentWeek }) {
 	return (
 		<div className='calender-header-container'>
 			<div className='calender-header-left'>
-				<button onClick={e => today(e)} className='ripple-button'>
+				<button onClick={e => today(e)} className='ripple-button today-button'>
 					{isRippling && settings === 'today' && (
 						<span
 							style={{
@@ -179,73 +179,75 @@ function CalenderHeader({ setting, setViewSetting, currentWeek }) {
 					)}
 				</div>
 			</div>
-			<div className='calender-header-bookmarks'>
-				<button
-					className='ripple-button'
-					onClick={e => {
-						e.stopPropagation();
-						const rect = e.target.getBoundingClientRect();
-						setCoords({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-						setSettings('filter');
-						setOpenFilterModal(!openFilterModal);
-					}}
-				>
-					{isRippling && settings === 'filter' && (
-						<span
-							style={{
-								left: coords.x,
-								top: coords.y,
-							}}
-						/>
+			<div style={{ display: 'flex', gap: '20px' }}>
+				<div className='calender-header-bookmarks'>
+					<button
+						className='ripple-button'
+						onClick={e => {
+							e.stopPropagation();
+							const rect = e.target.getBoundingClientRect();
+							setCoords({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+							setSettings('filter');
+							setOpenFilterModal(!openFilterModal);
+						}}
+					>
+						{isRippling && settings === 'filter' && (
+							<span
+								style={{
+									left: coords.x,
+									top: coords.y,
+								}}
+							/>
+						)}
+						Filter
+					</button>
+					{openFilterModal && (
+						<CalendarBookmark setOpenFilterModal={setOpenFilterModal} />
 					)}
-					Filter
-				</button>
-				{openFilterModal && (
-					<CalendarBookmark setOpenFilterModal={setOpenFilterModal} />
-				)}
-			</div>
-			<div className='calender-header-toggle'>
-				<div className={`background ${backgroundColor}`}></div>
-				<button
-					className={`${backgroundColor === 'left' ? 'white' : 'black'}`}
-					onClick={e => {
-						displayMonth();
-						const rect = e.target.getBoundingClientRect();
-						setCoords({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-						setSettings('monthsss');
-					}}
-				>
-					{isRippling && settings === 'monthsss' && (
-						<span
-							className='month-button'
-							style={{
-								left: coords.x,
-								top: coords.y,
-							}}
-						/>
-					)}
-					Month
-				</button>
-				<button
-					className={`${backgroundColor === 'right' ? 'white' : 'black'}`}
-					onClick={e => {
-						displayWeek();
-						const rect = e.target.getBoundingClientRect();
-						setCoords({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-						setSettings('weekss');
-					}}
-				>
-					{isRippling && settings === 'weekss' && (
-						<span
-							className={`month-button`}
-							style={{
-								left: coords.x,
-								top: coords.y,
-							}}
-						/>
-					)}
-					Week
-				</button>
+				</div>
+				<div className='calender-header-toggle'>
+					<div className={`background ${backgroundColor}`}></div>
+					<button
+						className={`${backgroundColor === 'left' ? 'white' : 'black'}`}
+						onClick={e => {
+							displayMonth();
+							const rect = e.target.getBoundingClientRect();
+							setCoords({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+							setSettings('monthsss');
+						}}
+					>
+						{isRippling && settings === 'monthsss' && (
+							<span
+								className='month-button'
+								style={{
+									left: coords.x,
+									top: coords.y,
+								}}
+							/>
+						)}
+						Month
+					</button>
+					<button
+						className={`${backgroundColor === 'right' ? 'white' : 'black'}`}
+						onClick={e => {
+							displayWeek();
+							const rect = e.target.getBoundingClientRect();
+							setCoords({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+							setSettings('weekss');
+						}}
+					>
+						{isRippling && settings === 'weekss' && (
+							<span
+								className={`month-button`}
+								style={{
+									left: coords.x,
+									top: coords.y,
+								}}
+							/>
+						)}
+						Week
+					</button>
+				</div>
 			</div>
 		</div>
 	);

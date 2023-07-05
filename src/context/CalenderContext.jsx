@@ -40,14 +40,6 @@ export const CalenderProvider = ({ children }) => {
 	const [isSame, setIsSame] = useState(null);
 	const [weekStartTime, setWeekStartTime] = useState(null);
 
-	// const [bookmarks, setBookmarks] = useState([
-	// 	{ bookmarkColor: 'purple', name: 'Event' },
-	// 	{ bookmarkColor: 'green', name: 'Birthday' },
-	// 	{ bookmarkColor: 'gray', name: 'Busines' },
-	// 	{ bookmarkColor: 'blue', name: 'Meeting' },
-	// 	{ bookmarkColor: 'red', name: 'Casual' },
-	// ]);
-
 	useEffect(() => {
 		if (showModal == false) {
 			setSelectedEvent(null);
@@ -89,18 +81,6 @@ export const CalenderProvider = ({ children }) => {
 		});
 		setActiveBookMarks(updateActiveBookmarks);
 	}, [state]);
-	// useEffect(() => {
-	// 	setActiveBookMarks(prevLabels => {
-	// 		return [...new Set(state.map(event => event.bookmark))].map(color => {
-	// 			console.log(color);
-	// 			const currentLabel = prevLabels.find(lbl => lbl.color === color);
-	// 			return {
-	// 				color,
-	// 				checked: currentLabel ? currentLabel.checked : true,
-	// 			};
-	// 		});
-	// 	});
-	// }, [state]);
 
 	const updateActiveBookmark = selected => {
 		setActiveBookMarks(

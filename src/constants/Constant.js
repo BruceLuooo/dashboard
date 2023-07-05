@@ -13,3 +13,16 @@ export const bookmarkColors = [
 	{ color: 'red', name: 'Casual' },
 	{ color: 'purple', name: 'Event' },
 ];
+
+export const legend = [
+	{ color: '#3366cc', product: 'Lamps' },
+	{ color: '#dc3912', product: 'Wall Deco' },
+	{ color: '#ff9900', product: 'Sofas' },
+	{ color: '#109618', product: 'Tables' },
+];
+
+export const sortingMethods = {
+	date: 'asc',
+	price: 'asc',
+	quantity: 'asc',
+};

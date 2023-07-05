@@ -45,7 +45,7 @@ function EventModal({ eventBannerRef }) {
 		posX: eventBannerRef.current?.offsetWidth,
 		posY: eventBannerRef.current?.offsetHeight,
 		visible: true,
-		closeToWindowSide: 'left',
+		closeToWindowSide: 'right',
 		height: 'bottom',
 	});
 
@@ -111,6 +111,18 @@ function EventModal({ eventBannerRef }) {
 		setShowModal(false);
 	};
 
+	const modalStyle = {
+		display: contextData.visible ? 'block' : 'none',
+		right:
+			contextData.closeToWindowSide === 'right'
+				? `${contextData.posX}px`
+				: null,
+		left:
+			contextData.closeToWindowSide === 'left' ? `${contextData.posX}px` : null,
+		top: contextData.height === 'bottom' ? `${contextData.posY - 113}px` : null,
+		bottom: contextData.height === 'top' ? `${contextData.posY - 57}px` : null,
+	};
+
 	return (
 		<div
 			className={`modal-container ${
@@ -122,23 +134,7 @@ function EventModal({ eventBannerRef }) {
 				}`
 			}`}
 			ref={contextRef}
-			style={{
-				display: contextData.visible ? 'block' : 'none',
-				right:
-					contextData.closeToWindowSide === 'right'
-						? `${contextData.posX}px`
-						: null,
-				left:
-					contextData.closeToWindowSide === 'left'
-						? `${contextData.posX}px`
-						: null,
-				top:
-					contextData.height === 'bottom'
-						? `${contextData.posY - 113}px`
-						: null,
-				bottom:
-					contextData.height === 'top' ? `${contextData.posY - 57}px` : null,
-			}}
+			style={modalStyle}
 			onAnimationEnd={() => setContextMenuAnimation(false)}
 			onClick={e => e.stopPropagation()}
 			onContextMenu={e => e.stopPropagation()}
