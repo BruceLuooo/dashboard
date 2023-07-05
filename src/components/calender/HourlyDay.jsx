@@ -141,7 +141,9 @@ function HourlyDay({ day }) {
 								}
 							}}
 							draggable={true}
-							onDragStart={onDragStart}
+							onDragStart={() => {
+								handleDragStart(overlappingEvent);
+							}}
 							onClick={e => {
 								if (overlappingEvent !== undefined) {
 									setSelectedEvent(overlappingEvent);
