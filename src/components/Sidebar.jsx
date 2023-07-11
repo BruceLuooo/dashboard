@@ -26,7 +26,7 @@ function Sidebar({ currentPage }) {
 				</button>
 				<img src={logo} alt='' className='logo' />
 				<span style={{ fontWeight: '600' }}>
-					Dash<span style={{ color: '#646cff' }}>border</span>
+					Dash<span style={{ color: '#646cff' }}>Boarder</span>
 				</span>
 			</div>
 			<div className='sidebar-options'>
