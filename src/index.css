@@ -1157,14 +1157,6 @@ button:hover {
   font-size: 18px;
 }
 
-
-.column-chart {
-  width: 350px;
-}
-.bar-chart {
-  width: 450px;
-}
-
 .sidebar-container {
   position: absolute;
   border-right: none;

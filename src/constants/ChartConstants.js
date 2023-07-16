@@ -9,7 +9,7 @@ export const barChartOptions = {
 	chartArea: {
 		left: 90,
 		right: 70,
-		width: '100%',
+		// width: '100%',
 		height: '80%',
 	},
 	hAxis: {
@@ -37,7 +37,6 @@ export const columnChartOptions = {
 	chartArea: {
 		left: 50,
 		right: 20,
-		width: '100%',
 		height: '80%',
 	},
 };

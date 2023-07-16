@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Chart } from 'react-google-charts';
 import {
 	pieChartOptions,
@@ -15,6 +15,7 @@ function Charts({ currentMonth }) {
 	const [columnChart, setColumnChart] = useState([]);
 	const [pieChart, setPieChart] = useState([]);
 	const [barChart, setBarChart] = useState([]);
+	const [test, setTest] = useState();
 
 	useEffect(() => {
 		setColumnChart(columnChartSetup(currentMonth));
@@ -27,18 +28,21 @@ function Charts({ currentMonth }) {
 			<Chart
 				className='pie-chart'
 				chartType='PieChart'
+				width='85%'
 				data={pieChart}
 				options={pieChartOptions}
 			/>
 			<Chart
 				className='column-chart'
 				chartType='ColumnChart'
+				width='90%'
 				data={columnChart}
 				options={columnChartOptions}
 			/>
 			<Chart
 				chartType='BarChart'
 				className='bar-chart'
+				width='90%'
 				data={barChart}
 				options={barChartOptions}
 			/>
